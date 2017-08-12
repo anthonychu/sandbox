@@ -1,6 +1,6 @@
 ---
 title: GitHubBot
-description: Manage GitHub with a chat bot
+description: Manage GitHub repos and issues with a chat bot
 author: BrianPeek
 manager: timheuer
 keywords: 
@@ -21,9 +21,8 @@ ms.devlang: csharp
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/BrianPeek/GitHubBot)
 
 ## Requirements
-* Visual Studio 2017
-* An Azure account
-* A GitHub account
+* An [Azure](https://azure.com) account
+* A [GitHub](https://github.com) account
 
 ## Links
 * [GitHubBot Repo](https://github.com/BrianPeek/GitHubBot)
@@ -31,40 +30,39 @@ ms.devlang: csharp
 ## Configuration
 Setting this bot up for your own use is a bit tricky as there many parts.  However, if you follow this guide closely, and in the order specified, you should be able to get this running yourself.
 
-First, of course, clone the [GitHubBot](https://github.com/BrianPeek/GitHubBot) repo to your computer using your favorite Git client.
-
 ### Azure Deployment
-1. Click the [Deploy to Azure]() link here or the button above.
-2. Enter the information for your Azure subscription
+1. Click the [Deploy to Azure](http://azuredeploy.net/?repository=https://github.com/BrianPeek/GitHubBot) link here or the button above.
+2. Enter the information for your Azure subscription.
 3. Copy down the URL to your web application, which will be https://&lt;yourappname&gt;.azurewebsites.net .
 
 The application will be deployed, but we'll need to come back to the portal later to enter some keys that you will generate below.
 
 ### LUIS.ai
-The root directory of the linked repo contains a file named **GitHubBot.json**.  This file contains the model for the bot.  To use it, do the following:
+The root directory of the linked repo contains a file named **GitHubBot.json**. This file contains the model for the bot.  To use it, do the following:
+1. Download this file (or clone the whole [GitHubBot repo](https://github.com/BrianPeek/GitHubBot) as you will need it for this step.
 1. Sign into the [LUIS.ai](https://luis.ai) website, creating an account if necessary.
 1. Click the **Import App** button on the **My apps** tab.
-1. Click the **Browse...** button and select the **GitHubBot.json** file located in the repo's root directory.
+1. Click the **Browse...** button and select the **GitHubBot.json** file.
 1. Optionally, give the app a name, otherwise it will use the default name of **GitHubBot** from the model you just uploaded.
 
 ### GitHub Application Setup
 1. Browse to the **OAuth applications** section of your profile on GitHub by navigating to [https://github.com/settings/developers](https://github.com/settings/developers), logging in if necessary.
 1. Click the **Register a new application** button at the top right of the page.
-1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler, and if you deployed the app using the instructions above, it will take the form of **https://appname.azurewebsites.net/api/OAuthCallback**.
-1. When the app is created, you will get a **Client ID** and **Client Secret**.  Copy these down somewhere safe.
+1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler for GitHubBot, and if you deployed the app using the instructions above, it will take the form of **https://&lt;yourappname&gt;.azurewebsites.net/api/OAuthCallback**.
+1. When the app is created, you will get a **Client ID** and **Client Secret**.  Copy these somewhere safe as you'll need them later.
 
 ### Bot Registration
 1. Browse to the Bot Framework portal and register a new bot by navigating to [https://dev.botframework.com/bots/new](https://dev.botframework.com/bots/new), logging in if necessary.
 1. Enter a name and handle in the **Bot profile** section.
 1. In the **Configuration** section, do the following:
-   1. Enter the messaging endpoint -- assuming you deployed your app to the default location, this will take the form of https://yourappname.azurewebsites.net/api/messages .
+   1. Enter the messaging endpoint -- assuming you deployed your app to the default location, this will take the form of https://&lt;yourappname&gt;.azurewebsites.net/api/messages .
    1. Click the **Create Microsoft App ID and password** button and login if requested.
-   1. Copy the **App ID** field somewhere safe
-   1. Click the **Generate an app password to continue** button, and copy the generated password somewhere safe.
-   1. Click the  **Finish and go back to Bot Framework** button.
-1. Tick the terms of use box, and then click the **Register** button.
+   1. Copy the **App ID** field somewhere safe as you will need it later.
+   1. Click the **Generate an app password to continue** button, and copy the generated password as you will need it later (and you cannot view it again).
+   1. Click the **Finish and go back to Bot Framework** button.
+1. Check the "terms of use" checkbox, and then click the **Register** button.
 
-By default, a Skype and Web Chat channel are created for you.  You can, of course, hook up any additional channels, but that is beyond the scope of this article.
+By default, a Skype and Web Chat channel are created for you.  You can, of course, hook up any additional channels as you see fit.
 
 ### App Service Configuration
 1. Head back to the [Azure portal](https://portal.azure.com/) and login.
@@ -89,10 +87,20 @@ Head back to the [Bot Framework portal](https://dev.botframework.com/bots/) and 
 * Add additional channels and communicate through those apps
 
 ## How it Works
-* OctoKit
-* OAuth
-* LUIS.ai training
-* LuisDialog
+As said earlier, there are a lot of parts here.  Let's talk about some of the important ones:
+
+### OctoKit
+OctoKit.NET is a library that provides a nice API for the GitHub REST API for .NET developers.  This handles OAuth in addition to all of the GitHub calls we need.  To use this in your own projects, just search for OctoKit in the NuGet package manager and install.
+
+### OAuth
+OAuth is required to authenticate a user against the GitHub API.  OctoKit.NET handles most of the messiness of OAuth, but we still need to do a few things ourselves, especially as it relates to the Bot Framework.  
+
+### LUIS.ai training
+I have included a pre-trained model with intents for this project, but the how it was created is important.
+
+### LuisDialog
+LuisDialog is the class used by the Bot Framework to work with LUIS results.
+
 
 ## Next Steps
 * [Bot Framework Docs](https://docs.microsoft.com/bot-framework)
