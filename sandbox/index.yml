@@ -24,14 +24,14 @@ sections:
     text: Some fun demos (with code!) using various Azure services
   - type: list
     style: cards
-    className: cardsM
+    className: cardsC
     columns: 2
     items: 
     - title: GitHubBot
       html: <p>Manage GitHub repos and issues in chat.</p>
       href: https://docs.microsoft.com/sandbox/githubbot
       image:
-        src: https://docs.microsoft.com/azure/media/index/bot-service.svg
+        src: https://docs.microsoft.com/sandbox/media/githubbot/skype.png
     # - title: Placeholder2
     #   html: <p>Some text goes here.</p>
     #   href: https://review.docs.microsoft.com/sandbox/template
