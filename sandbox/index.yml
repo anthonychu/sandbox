@@ -31,7 +31,7 @@ sections:
       html: <p>Manage GitHub repos and issues in chat.</p>
       href: https://docs.microsoft.com/sandbox/githubbot
       image:
-        src: https://review.docs.microsoft.com/sandbox/media/githubbot/skype.png?branch=brpeek-githubbot
+        src: https://docs.microsoft.com/sandbox/media/githubbot/skype.png
     # - title: Placeholder2
     #   html: <p>Some text goes here.</p>
     #   href: https://review.docs.microsoft.com/sandbox/template
