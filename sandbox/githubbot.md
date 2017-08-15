@@ -114,7 +114,7 @@ OctoKit.NET is a library that provides a nice API for the GitHub REST API for .N
 OAuth is required to authenticate a user against the GitHub API.  OctoKit.NET handles most of the messiness of OAuth, but we still need to do a few things ourselves, especially as it relates to the Bot Framework.  When the OAuth process is initiated, OctoKit.NET calls a specific endpoint at GitHub.com with some data we pass.  Part of this data that we pass along is a serialized `ConversationReference` object.  The OAuth procedure will hand this serialized state back to us, which we can then use to spin the conversation back up with the user and continue. This makes the login procedure seamless.
 
 ### LUIS.ai training
-I have included a pre-trained model with intents for this project.  A few notes about it:
+I have included a pre-trained model with intents for this project.  You can and should monitor/train this model as you use it.  A few notes about the model:
 * It contains 9 intents which map to the "commands" the chat bot can handle.
 * It contains several custom entities that make parsing the query possible.  These include the "ScopeType" (private or public for repositories), and "RepoName" which is exactly what it sounds like.
 * The model also uses two prebuilt entities: datetimeV2 and number.  DatetimeV2 is interesting in that a user can say something like "What are my new issues since last Friday" and LUIS will convert "last Friday" into the actual dateime for "last Friday" so you don't need to do the math yourself.
@@ -130,6 +130,9 @@ await Conversation.SendAsync(activity, () => new GitHubLuisDialog(luisSvc));
 ```
 
 ## Next Steps
+
+Here are links to the docs for the items discussed above.
+
 * [Bot Framework Docs](https://docs.microsoft.com/bot-framework)
 * [LUIS.ai Docs](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/Home)
 * [OctoKit.NET](https://octokit.github.io/)
