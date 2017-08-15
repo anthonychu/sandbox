@@ -21,8 +21,8 @@ ms.devlang: csharp
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/BrianPeek/GitHubBot)
 
 ## Requirements
-* An [Azure](https://azure.com) account
-* A [GitHub](https://github.com) account
+* An [Azure](https://azure.microsoft.com/en-us/free/) account
+* A [GitHub](https://github.com/) account
 
 ## Links
 * [GitHubBot Repo](https://github.com/BrianPeek/GitHubBot)
