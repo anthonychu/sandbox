@@ -46,17 +46,16 @@ The application will be deployed, but we'll need to come back to the portal late
    1. Copy the **App ID** field somewhere safe as you will need it later. [1]
    1. Click the **Generate an app password to continue** button, and copy the generated password as you will need it later (and you cannot view it again). [2]
    1. Click the **Finish and go back to Bot Framework** button.
+      ![bot keys](media/githubbot/bot-keys.png)
 1. Check the "terms of use" checkbox, and then click the **Register** button.
 
-![bot keys](media/githubbot/bot-keys.png)
-
-By default, a Skype and Web Chat channel are created for you.  You can, of course, hook up any additional channels as you see fit.
+The App ID can be viewed later on from the Bot Framework portal, however the password is only displayed this one time. If you lose it, you will have to generate a new password.
 
 ### GitHub Application Setup
 1. Browse to the **OAuth applications** section of your profile on GitHub by navigating to [https://github.com/settings/developers](https://github.com/settings/developers), logging in if necessary.
 1. Click the **Register a new application** button at the top right of the page.
 1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler for GitHubBot, and if you deployed the app using the instructions above, it will take the form of **https://&lt;yourappname&gt;.azurewebsites.net/api/OAuthCallback**. [3]
-1. When the app is created, you will get a **Client ID** and **Client Secret**.  Copy these somewhere safe as you'll need them later. [4]
+1. After the app is created, you will be presented wtih a **Client ID** and **Client Secret**.  Copy these somewhere safe as you'll need them later. [4]  If you lose them, you can always browse back to the link above and view your application and change its configuration.
 
 ![github keys](media/githubbot/github-keys.png)
 
@@ -68,13 +67,15 @@ The root directory of the linked repo contains a file named **GitHubBot.json**. 
 1. Click the **Import App** button.
 1. Click the **Browse...** button and select the **GitHubBot.json** file.
 1. Optionally, give the app a new name, otherwise it will use the default name of **GitHubBot** from the model you just uploaded.
-1. When the app is imported, copy down the **App Id** found on the **Dashboard** tab. [5]
+1. After the app is imported, copy down the **App Id** found on the **Dashboard** tab. [5]
 
 ![luis id](media/githubbot/luis-appid.png)
 
 1. Click the **My keys** tab and copy the **Programmatic API Key** which is good for 1000 endpoint hits per month. [6] This key is just for testing, and you can [setup a production key](https://docs.microsoft.com/azure/cognitive-services/luis/azureibizasubscription) later.
 
 ![luis key](media/githubbot/luis-key.png)
+
+These keys are always accessible from the LUIS.ai site later on.
 
 ### App Service Configuration
 1. Browse back to the [Azure portal](https://portal.azure.com/) and login.
