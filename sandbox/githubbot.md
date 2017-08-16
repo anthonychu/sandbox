@@ -32,16 +32,18 @@ Setting this bot up for your own use is a bit tricky as there many parts.  Howev
 
 ### Azure Deployment
 1. Click the [Deploy to Azure](http://azuredeploy.net/?repository=https://github.com/BrianPeek/GitHubBot) link here or the button above.
-2. Enter the information for your Azure subscription.
-3. Copy down the URL to your web application, which will be https://&lt;yourappname&gt;.azurewebsites.net .
+1. Enter the information for your Azure subscription, such as the resource group, location, etc. and give your site a unique Site Name.  This site name will become part of the URL.
+1. Copy down the URL to your web application, which will be https://&lt;sitename&gt;.azurewebsites.net .
 
-The application will be deployed, but we'll need to come back to the portal later to enter some keys that you will generate below.
+![azure deploy](media/githubbot/azure-deploy.png)
+
+The application will be deployed and the GitHub repo above will be setup in the App Service as the deployment source.  We'll come back to the portal later to enter some keys that you will generate below.
 
 ### Bot Registration
 1. Browse to the Bot Framework portal and register a new bot by navigating to [https://dev.botframework.com/bots/new](https://dev.botframework.com/bots/new), logging in if necessary.
 1. Enter a name and handle in the **Bot profile** section.
 1. In the **Configuration** section, do the following:
-   1. Enter the messaging endpoint -- assuming you deployed your app to the default location, this will take the form of https://&lt;yourappname&gt;.azurewebsites.net/api/messages .
+   1. Enter the messaging endpoint -- assuming you deployed your app to the default location, this will take the form of https://&lt;sitename&gt;.azurewebsites.net/api/messages .
    1. Click the **Create Microsoft App ID and password** button and login if requested.
    1. Copy the **App ID** field somewhere safe as you will need it later. [1]
    1. Click the **Generate an app password to continue** button, and copy the generated password as you will need it later (and you cannot view it again). [2]
@@ -54,7 +56,7 @@ The App ID can be viewed later on from the Bot Framework portal, however the pas
 ### GitHub Application Setup
 1. Browse to the **OAuth applications** section of your profile on GitHub by navigating to [https://github.com/settings/developers](https://github.com/settings/developers), logging in if necessary.
 1. Click the **Register a new application** button at the top right of the page.
-1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler for GitHubBot, and if you deployed the app using the instructions above, it will take the form of **https://&lt;yourappname&gt;.azurewebsites.net/api/OAuthCallback**. [3]
+1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler for GitHubBot, and if you deployed the app using the instructions above, it will take the form of **https://&lt;sitename&gt;.azurewebsites.net/api/OAuthCallback**. [3]
 1. After the app is created, you will be presented wtih a **Client ID** and **Client Secret**.  Copy these somewhere safe as you'll need them later. [4]  If you lose them, you can always browse back to the link above and view your application and change its configuration.
 
 ![github keys](media/githubbot/github-keys.png)
@@ -108,10 +110,10 @@ Head back to the [Bot Framework portal](https://dev.botframework.com/bots/) and 
 As said earlier, there are a lot of parts here.  Let's talk about some of the important ones:
 
 ### OctoKit
-OctoKit.NET is a library that provides a nice API for the GitHub REST API for .NET developers.  This handles OAuth in addition to all of the GitHub calls we need.  To use this in your own projects, just search for OctoKit in the NuGet package manager and install.  The API itself is quite simple.  Once you complete the OAuth procedure on behalf of the user, you'll be handed a token that is used for each query.  The library handles much more than repos and issues, but that's all this demo is currently using.
+[OctoKit.NET](https://octokit.github.io/) is a library that wraps the GitHub REST API for .NET developers.  This handles OAuth in addition to all of the GitHub calls we need.  To use this in your own projects, just search for OctoKit in the NuGet package manager and install.  The API itself is quite simple.  Once you complete the OAuth procedure on behalf of the user, you'll be handed a token that is used for each subsequent query (or, you can use the library anonymously to query public GitHub information).  The library handles much more than repos and issues, but that's all this demo is currently using.
 
 ### OAuth
-OAuth is required to authenticate a user against the GitHub API.  OctoKit.NET handles most of the messiness of OAuth, but we still need to do a few things ourselves, especially as it relates to the Bot Framework.  When the OAuth process is initiated, OctoKit.NET calls a specific endpoint at GitHub.com with some data we pass.  Part of this data that we pass along is a serialized `ConversationReference` object.  The OAuth procedure will hand this serialized state back to us, which we can then use to spin the conversation back up with the user and continue. This makes the login procedure seamless.
+OAuth is required to authenticate a user against the GitHub API.  OctoKit.NET handles most of the messiness of OAuth, but we still need to do a few things ourselves, especially as it relates to the Bot Framework.  When the OAuth process is initiated, OctoKit.NET calls a specific endpoint at GitHub with some state data we pass along.  Part of this data is a serialized `ConversationReference` object.  The OAuth procedure will hand this serialized state back to us after the user logs in, and we then use this to spin the conversation back up with the user and continue. This makes the login procedure seamless.
 
 ### LUIS.ai training
 I have included a pre-trained model with intents for this project.  You can and should monitor/train this model as you use it.  A few notes about the model:
