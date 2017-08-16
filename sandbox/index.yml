@@ -31,4 +31,4 @@ sections:
       html: <p>Manage GitHub repos and issues in chat.</p>
       href: githubbot
       image:
-        src: media/githubbot/skype.png
+        src: media/githubbot/index.png
