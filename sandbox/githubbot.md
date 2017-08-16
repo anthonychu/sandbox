@@ -40,23 +40,23 @@ Setting this bot up for your own use is a bit tricky as there many parts.  Howev
 The application will be deployed and the GitHub repo above will be setup in the App Service as the deployment source.  We'll come back to the portal later to enter some keys that you will generate below.
 
 ### Bot Registration
-1. Browse to the Bot Framework portal and register a new bot by navigating to [https://dev.botframework.com/bots/new](https://dev.botframework.com/bots/new), logging in if necessary.
+1. Browse to the Bot Framework portal and register a new bot by navigating to [https://dev.botframework.com/bots/new](https://dev.botframework.com/bots/new), logging in and/or creating an account if necessary.
 1. Enter a name and handle in the **Bot profile** section.
 1. In the **Configuration** section, do the following:
    1. Enter the messaging endpoint -- assuming you deployed your app to the default location, this will take the form of https://&lt;sitename&gt;.azurewebsites.net/api/messages .
    1. Click the **Create Microsoft App ID and password** button and login if requested.
    1. Copy the **App ID** field somewhere safe as you will need it later. [1]
    1. Click the **Generate an app password to continue** button, and copy the generated password as you will need it later (and you cannot view it again). [2]
+      * **Note:** The App ID can be viewed later on from the Bot Framework portal, however the password is only displayed this one time. If you lose it, you will have to generate a new password.
    1. Click the **Finish and go back to Bot Framework** button.
       ![bot keys](media/githubbot/bot-keys.png)
-1. Check the "terms of use" checkbox, and then click the **Register** button.
-
-The App ID can be viewed later on from the Bot Framework portal, however the password is only displayed this one time. If you lose it, you will have to generate a new password.
+1. Scroll down, check the "terms of use" checkbox, and then click the **Register** button.
 
 ### GitHub Application Setup
 1. Browse to the **OAuth applications** section of your profile on GitHub by navigating to [https://github.com/settings/developers](https://github.com/settings/developers), logging in if necessary.
 1. Click the **Register a new application** button at the top right of the page.
 1. Enter the required information.  The one that really matters is **Authorization callback URL**.  This is the URL to the OAuth handler for GitHubBot, and if you deployed the app using the instructions above, it will take the form of **https://&lt;sitename&gt;.azurewebsites.net/api/OAuthCallback**. [3]
+1. Click the **Register application** button.
 1. After the app is created, you will be presented wtih a **Client ID** and **Client Secret**.  Copy these somewhere safe as you'll need them later. [4]  If you lose them, you can always browse back to the link above and view your application and change its configuration.
 
 ![github keys](media/githubbot/github-keys.png)
@@ -69,29 +69,33 @@ The root directory of the linked repo contains a file named **GitHubBot.json**. 
 1. Click the **Import App** button.
 1. Click the **Browse...** button and select the **GitHubBot.json** file.
 1. Optionally, give the app a new name, otherwise it will use the default name of **GitHubBot** from the model you just uploaded.
+1. Click the **Import** button.
 1. After the app is imported, copy down the **App Id** found on the **Dashboard** tab. [5]
-
-![luis id](media/githubbot/luis-appid.png)
-
+   ![luis id](media/githubbot/luis-appid.png)
 1. Click the **My keys** tab and copy the **Programmatic API Key** which is good for 1000 endpoint hits per month. [6] This key is just for testing, and you can [setup a production key](https://docs.microsoft.com/azure/cognitive-services/luis/azureibizasubscription) later.
+   ![luis key](media/githubbot/luis-key.png)
+   * These keys are always accessible from the LUIS.ai site later on.
 
-![luis key](media/githubbot/luis-key.png)
-
-These keys are always accessible from the LUIS.ai site later on.
+1. Click the **My apps** tab and select the bot you just created from the list.
+1. Click the **Publish app** selection in the left navbar.
+1. Select the default **Endpoint Key** in the dropdown box (or one you purchased).
+1. Click the **Train** button.
+1. When training is complete, click the **Publish** button.
+   ![luis publish](media/githubbot/luis-publish.png)
 
 ### App Service Configuration
 1. Browse back to the [Azure portal](https://portal.azure.com/) and login.
 1. Open the App Service that you deployed above.
 1. Click the **Application settings** entry in the **Settings** section in the left panel.
-1. Add the following entries to the **App settings** section:
+1. Add the following entries to the **App settings** section and then click the **Save** button:
 
 Key | Value
 ----|------
 MicrosoftAppId       | The App Id copied from the Bot Registration step [1]
 MicrosoftAppPassword | The generated password copied from the Bot Registration step [2]
-RedirectUri          | The OAuthCallback handler, which must match the URL you used when you created the OAuthApation on GitHub [3]
+RedirectUri          | The OAuthCallback handler, which must match the URL you used when you created the OAuth Application on GitHub [3]
 GitHubClientId       | The ID generated by GitHub when you created the OAuth Application [4]
-GitHubClientSecret   | The secret generated by GitHub when you created the OAuthApplication [4]
+GitHubClientSecret   | The secret generated by GitHub when you created the OAuth Application [4]
 LuisModelId          | The ID genreated by LUIS.ai [5]
 LuisSubscriptionKey  | The ID generated by LUIS.ai [6]
 
@@ -107,7 +111,7 @@ Head back to the [Bot Framework portal](https://dev.botframework.com/bots/) and 
 ![GitHubBot in Skype](media/githubbot/skype.png)
 
 ## How it Works
-As said earlier, there are a lot of parts here.  Let's talk about some of the important ones:
+There are a lot of parts here -- let's talk about some of the important ones:
 
 ### OctoKit
 [OctoKit.NET](https://octokit.github.io/) is a library that wraps the GitHub REST API for .NET developers.  This handles OAuth in addition to all of the GitHub calls we need.  To use this in your own projects, just search for OctoKit in the NuGet package manager and install.  The API itself is quite simple.  Once you complete the OAuth procedure on behalf of the user, you'll be handed a token that is used for each subsequent query (or, you can use the library anonymously to query public GitHub information).  The library handles much more than repos and issues, but that's all this demo is currently using.
