@@ -29,11 +29,6 @@ sections:
     items: 
     - title: GitHubBot
       html: <p>Manage GitHub repos and issues in chat.</p>
-      href: https://docs.microsoft.com/sandbox/githubbot
+      href: githubbot
       image:
-        src: https://docs.microsoft.com/sandbox/media/githubbot/skype.png
-    # - title: Placeholder2
-    #   html: <p>Some text goes here.</p>
-    #   href: https://review.docs.microsoft.com/sandbox/template
-    #   image:
-    #     src: https://docs.microsoft.com/en-us/azure/media/index/app-service-web.svg
+        src: media/githubbot/skype.png
