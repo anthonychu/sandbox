@@ -5,10 +5,4 @@
       expanded: true
       items:
       - name: GitHubBot
-        href: https://docs.microsoft.com/sandbox/githubbot
-      # - name: Placeholder2
-      #   href: https://review.docs.microsoft.com/sandbox/template
-      # - name: Placeholder3
-      #   href: https://review.docs.microsoft.com/sandbox/template
-      # - name: Placeholder4
-      #   href: https://review.docs.microsoft.com/sandbox/template
+        href: githubbot

@@ -121,13 +121,20 @@ OAuth is required to authenticate a user against the GitHub API.  OctoKit.NET ha
 
 ### LUIS.ai training
 I have included a pre-trained model with intents for this project.  You can and should monitor/train this model as you use it.  A few notes about the model:
-* It contains 9 intents which map to the "commands" the chat bot can handle.
-* It contains several custom entities that make parsing the query possible.  These include the "ScopeType" (private or public for repositories), and "RepoName" which is exactly what it sounds like.
-* The model also uses two prebuilt entities: datetimeV2 and number.  DatetimeV2 is interesting in that a user can say something like "What are my new issues since last Friday" and LUIS will convert "last Friday" into the actual dateime for "last Friday" so you don't need to do the math yourself.
-* The model contains two phrase lists to help LUIS understand GitHub-specific terms like repossitory, gist, pull request, etc.
+* It contains 9 intents which map to the "commands" the chat bot can handle.  Check the **Intents** tab in the left navbar to see them all and how they were trained.
+* It contains several custom entities that make parsing the query possible.  These include the **ScopeType** (private or public for repositories), and **RepoName**.
+* The model also uses two prebuilt entities: **datetimeV2** and **number**.  **DatetimeV2** is interesting in that a user can say something like "What are my new issues since last Friday" and LUIS will convert "last Friday" into the actual dateime for "last Friday" so you don't need to do the math yourself.  There are a lot more prebuilt entties, see the [docs](https://docs.microsoft.com/azure/cognitive-services/luis/pre-builtentities) for more information.
+* The model contains two phrase lists to help LUIS understand GitHub-specific terms like repossitory, gist, pull request, etc.  You can find those in the **Features** tab in the left navbar.
 
 ### GitHubLuisDialog
-LuisDialog is the class used by the Bot Framework to work with LUIS results.  Methods in this class are tagged with the **LuisIntent** attribute and the intent it maps to.  So, when LUIS determines the user is requesting the "CloseIssue" intent, for example, the "CloseIssue" method in this class is tagged with that intent and will be call automatically through the Bot Framework.  The LUIS service is mapped to our class in the first few lines of the Message handler in MessageController.cs.
+LuisDialog is the class used by the Bot Framework to work with LUIS results.  Methods in this class are tagged with the **LuisIntent** attribute and the intent it maps to.  So, when LUIS determines the user is requesting the **CloseIssue** intent, for example, the `CloseIssue` method in this class is tagged with that intent and will be call automatically through the Bot Framework.
+
+```csharp
+[LuisIntent("CloseIssue")]
+public async Task CloseIssue(IDialogContext context, LuisResult result)
+```
+
+The LUIS service is mapped to our class in the first few lines of the Message handler in MessageController.cs.
 
 ```csharp
 LuisModelAttribute attr = new LuisModelAttribute(ConfigurationManager.AppSettings[Constants.LuisModelIdKey], ConfigurationManager.AppSettings[Constants.LuisSubscriptionKey]);
@@ -137,7 +144,7 @@ await Conversation.SendAsync(activity, () => new GitHubLuisDialog(luisSvc));
 
 ## Next Steps
 
-Here are links to the docs for the items discussed above.
+Here are links to the docs for the items discussed above.  Play around with the project and feel free to leave comments on the article, [open issues](https://github.com/BrianPeek/GitHubBot/issues) in the repo, or submit [pull requests](https://github.com/BrianPeek/GitHubBot/pulls) with fixes and new features.  Enjoy!
 
 * [Bot Framework Docs](https://docs.microsoft.com/bot-framework)
 * [LUIS.ai Docs](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/Home)
